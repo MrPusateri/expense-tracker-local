@@ -218,3 +218,40 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Segreti e configurazione locale
+.env
+.env.*
+!.env.example
+
+# Dati finanziari reali: non devono mai finire nel repository
+inbox/
+archive/
+backups/
+*.xlsx
+!tests/fixtures/**/*.xlsx
+
+# Claude Code: impostazioni e note personali
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# dbt
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+
+# MLflow locale (in Docker vive in un volume)
+mlruns/
+mlartifacts/
+
+# Sistema
+.DS_Store

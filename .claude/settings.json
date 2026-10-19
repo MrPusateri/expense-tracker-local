@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "defaultMode": "default",
+    "disableBypassPermissionsMode": "disable",
+    "blockReadsOutsideWorkingDirectories": true,
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(!.env.example)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(./inbox/**)",
+      "Read(./archive/**)",
+      "Read(./backups/**)",
+      "Read(**/movimenti-*.xlsx)",
+      "Bash(printenv *)",
+      "Bash(env)",
+      "Bash(docker compose config *)",
+      "Bash(docker compose * config *)",
+      "Bash(docker inspect *)",
+      "Bash(docker compose down -v *)",
+      "Bash(docker compose down --volumes *)",
+      "Bash(docker volume rm *)",
+      "Bash(docker volume prune *)",
+      "Bash(docker system prune *)",
+      "Bash(rm -rf *)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(curl *)",
+      "Bash(wget *)"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(docker exec *)",
+      "Bash(docker compose exec *)",
+      "Bash(make restore *)",
+      "Bash(make migrate *)",
+      "Bash(gh issue close *)",
+      "Bash(gh issue edit *)",
+      "Bash(gh pr create *)",
+      "Bash(gh pr merge *)",
+      "Edit(./Makefile)",
+      "Edit(./docker-compose*.yml)",
+      "Edit(./Dockerfile*)",
+      "Edit(./docs/07-registro-decisioni.md)",
+      "Edit(./.gitignore)"
+    ],
+    "allow": [
+      "Bash(make test *)",
+      "Bash(make lint *)",
+      "Bash(make fmt *)",
+      "Bash(uv run pytest *)",
+      "Bash(uv run ruff *)",
+      "Bash(uv run mypy *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git show *)",
+      "Bash(git branch *)",
+      "Bash(git switch *)",
+      "Bash(git add *)",
+      "Bash(gh issue view *)",
+      "Bash(gh issue list *)",
+      "Bash(gh pr view *)",
+      "Bash(docker compose ps *)",
+      "Bash(docker compose logs *)",
+      "WebFetch(domain:docs.sqlalchemy.org)",
+      "WebFetch(domain:alembic.sqlalchemy.org)",
+      "WebFetch(domain:mlflow.org)",
+      "WebFetch(domain:docs.getdbt.com)",
+      "WebFetch(domain:docs.streamlit.io)",
+      "WebFetch(domain:docs.docker.com)",
+      "WebFetch(domain:www.postgresql.org)",
+      "WebFetch(domain:www.cosmicpython.com)",
+      "WebFetch(domain:scikit-learn.org)",
+      "WebFetch(domain:docs.astral.sh)",
+      "WebFetch(domain:pandas.pydata.org)",
+      "WebFetch(domain:openpyxl.readthedocs.io)",
+      "WebFetch(domain:code.claude.com)"
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": false,
+    "excludedCommands": [
+      "make *",
+      "docker compose *",
+      "gh issue *",
+      "gh pr *"
+    ],
+    "filesystem": {
+      "denyRead": [
+        "./.env",
+        "./.env.*",
+        "./**/.env",
+        "./inbox",
+        "./archive",
+        "./backups"
+      ],
+      "allowRead": [
+        "./.env.example"
+      ]
+    },
+    "network": {
+      "allowedDomains": [
+        "pypi.org",
+        "files.pythonhosted.org",
+        "github.com",
+        "*.githubusercontent.com"
+      ]
+    }
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard-secrets.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/format-python.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
